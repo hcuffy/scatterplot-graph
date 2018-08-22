@@ -3,37 +3,38 @@ $(document).ready(function() {
 		'https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json',
 		function(data) {
 
-			const w = 900
-			const h = 400
-			const padding = 80
+			const width = 900
+			const height = 400
+			const padding = 20
 			var dataset = []
-			var specifier = '%M:%S'
+			const specifier = '%M:%S'
 
 			data.forEach((entry) => {
 				var timeTesz = d3.timeParse(specifier)(entry.Time)
 				dataset.push([timeTesz , entry.Year])
 			})
 
-			var maxYear = d3.max(dataset, d => d[1])
-			var minYear = d3.min(dataset, d => d[1])
+			const maxYear = d3.max(dataset, d => d[1])
+			const minYear = d3.min(dataset, d => d[1])
 
 			var xScale = d3
 				.scaleLinear()
-				.domain([minYear -2, maxYear + 2])
-				.range([0, w])
+				.domain([minYear - 2, maxYear + 2])
+				.range([0, width])
 
 			var yScale = d3
 				.scaleTime()
 				.domain(d3.extent(dataset, d => d[0]))
-				.range([20 , h ])
+				.range([20 , height ])
 
 			const xAxis = d3.axisBottom(xScale)
 			const yAxis = d3.axisLeft(yScale)
 
 			const svg = d3.select('body')
 				.append('svg')
-				.attr('width', w)
-				.attr('height', h)
+				.attr('width', width)
+				.attr('height', height)
+				.style('padding', padding)
 
 			svg.selectAll('circle')
 				.data(dataset)
@@ -43,6 +44,12 @@ $(document).ready(function() {
 				.attr('cy', d => yScale(new Date (d[0])))
 				.attr('r', 7)
 				.attr('fill', '#4286f4')
+
+			svg
+				.append('g')
+				.attr('transform', 'translate(0,'+ height +')')
+				.attr('id', 'x-axis')
+				.call(xAxis)
 
 		}
 	)
