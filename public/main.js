@@ -30,7 +30,7 @@ $(document).ready(function() {
 			const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('d'))
 			const yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat('%M:%S'))
 
-			const svg = d3.select('body')
+			const svg = d3.select('.chart')
 				.append('svg')
 				.attr('width', width)
 				.attr('height', height)
@@ -43,7 +43,7 @@ $(document).ready(function() {
 				.attr('cx', d => xScale(d[1]))
 				.attr('cy', d => yScale(new Date (d[0])))
 				.attr('r', 7)
-				.attr('fill', '#4286f4')
+				.attr('fill', '#727272')
 
 			svg
 				.append('g')
