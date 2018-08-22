@@ -6,8 +6,8 @@ $(document).ready(function() {
 			const width = 900
 			const height = 400
 			const padding = 20
-			var dataset = []
 			const specifier = '%M:%S'
+			var dataset = []
 
 			data.forEach((entry) => {
 				var timeTesz = d3.timeParse(specifier)(entry.Time)
@@ -27,8 +27,8 @@ $(document).ready(function() {
 				.domain(d3.extent(dataset, d => d[0]))
 				.range([20 , height ])
 
-			const xAxis = d3.axisBottom(xScale)
-			const yAxis = d3.axisLeft(yScale)
+			const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('d'))
+			const yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat('%M:%S'))
 
 			const svg = d3.select('body')
 				.append('svg')
@@ -50,6 +50,12 @@ $(document).ready(function() {
 				.attr('transform', 'translate(0,'+ height +')')
 				.attr('id', 'x-axis')
 				.call(xAxis)
+
+			svg
+				.append('g')
+				.attr('transform', 'translate('+ padding +')')
+				.attr('id', 'y-axis')
+				.call(yAxis)
 
 		}
 	)
