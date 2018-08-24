@@ -14,6 +14,8 @@ $(document).ready(function() {
 				.append('div')
 				.attr('id', 'tooltip')
 
+			var formatTime = d3.timeFormat(specifier)
+
 			data.forEach((entry) => {
 				var timeTesz = d3.timeParse(specifier)(entry.Time)
 				dataset.push([timeTesz, entry.Year, entry.Name, entry.Nationality, entry.Doping])
@@ -33,7 +35,7 @@ $(document).ready(function() {
 				.range([20 , height ])
 
 			const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('d'))
-			const yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat('%M:%S'))
+			const yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat(specifier))
 
 			const svg = d3.select('.chart')
 				.append('svg')
@@ -49,7 +51,9 @@ $(document).ready(function() {
 				.attr('cx', d => xScale(d[1]))
 				.attr('cy', d => yScale(new Date (d[0])))
 				.attr('r', 7)
-				.attr('fill', '#727272')
+				.attr('fill', d => {
+					 return (d[4] = '' ? '#378718' : '#d64f4f')
+				})
 				.attr('data-xvalue', d => d[1])
 				.attr('data-yvalue', d => new Date (d[0]))
 				.on('mouseover', d => {
@@ -59,7 +63,7 @@ $(document).ready(function() {
 						.style('visibility', 'visible')
 					tooltip
 						.attr('data-year', d[1])
-						.html( d[2] + ' : ' + d[3] )
+						.html( d[2] + ' : ' + d[3] + '<br>' + 'Year: ' + d[1] + ' Time: ' + formatTime(d[0]))
 						.style('left', (d3.event.pageX + 10) + 'px')
 						.style('top', (d3.event.pageY + 10) + 'px')
 				})
