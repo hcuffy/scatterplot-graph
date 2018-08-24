@@ -9,9 +9,14 @@ $(document).ready(function() {
 			const specifier = '%M:%S'
 			var dataset = []
 
+			var tooltip = d3
+				.select('.chart')
+				.append('div')
+				.attr('id', 'tooltip')
+
 			data.forEach((entry) => {
 				var timeTesz = d3.timeParse(specifier)(entry.Time)
-				dataset.push([timeTesz , entry.Year])
+				dataset.push([timeTesz, entry.Year, entry.Name, entry.Nationality, entry.Doping])
 			})
 
 			const maxYear = d3.max(dataset, d => d[1])
@@ -19,7 +24,7 @@ $(document).ready(function() {
 
 			var xScale = d3
 				.scaleLinear()
-				.domain([minYear - 2, maxYear + 2])
+				.domain([minYear - 1, maxYear + 2])
 				.range([0, width])
 
 			var yScale = d3
@@ -34,16 +39,35 @@ $(document).ready(function() {
 				.append('svg')
 				.attr('width', width)
 				.attr('height', height)
-				.style('padding', padding)
+				.style('padding', padding + 50)
 
 			svg.selectAll('circle')
 				.data(dataset)
 				.enter()
 				.append('circle')
+				.attr('class', 'dot')
 				.attr('cx', d => xScale(d[1]))
 				.attr('cy', d => yScale(new Date (d[0])))
 				.attr('r', 7)
 				.attr('fill', '#727272')
+				.attr('data-xvalue', d => d[1])
+				.attr('data-yvalue', d => new Date (d[0]))
+				.on('mouseover', d => {
+					tooltip
+						.transition()
+						.style('opacity', 1)
+						.style('visibility', 'visible')
+					tooltip
+						.attr('data-year', d[1])
+						.html( d[2] + ' : ' + d[3] )
+						.style('left', (d3.event.pageX + 10) + 'px')
+						.style('top', (d3.event.pageY + 10) + 'px')
+				})
+
+			svg.on('mouseout', d => {
+				tooltip.transition().style('visibility', 'hidden')
+			})
+
 
 			svg
 				.append('g')
