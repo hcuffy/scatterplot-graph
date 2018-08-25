@@ -8,13 +8,12 @@ $(document).ready(function() {
 			const padding = 20
 			const specifier = '%M:%S'
 			var dataset = []
+    	var formatTime = d3.timeFormat(specifier)
 
 			var tooltip = d3
 				.select('.chart')
 				.append('div')
 				.attr('id', 'tooltip')
-
-			var formatTime = d3.timeFormat(specifier)
 
 			data.forEach((entry) => {
 				var timeTesz = d3.timeParse(specifier)(entry.Time)
@@ -52,7 +51,8 @@ $(document).ready(function() {
 				.attr('cy', d => yScale(new Date (d[0])))
 				.attr('r', 7)
 				.attr('fill', d => {
-					 return (d[4] = '' ? '#378718' : '#d64f4f')
+				  let circleColor =  d[4].length ? '#d64f4f' : '#378718'
+					 return circleColor
 				})
 				.attr('data-xvalue', d => d[1])
 				.attr('data-yvalue', d => new Date (d[0]))
@@ -63,7 +63,7 @@ $(document).ready(function() {
 						.style('visibility', 'visible')
 					tooltip
 						.attr('data-year', d[1])
-						.html( d[2] + ' : ' + d[3] + '<br>' + 'Year: ' + d[1] + ' Time: ' + formatTime(d[0]))
+						.html( d[2] + ' : ' + d[3] + '<br>' + 'Year: ' + d[1] + ' Time: ' + formatTime(d[0]) + '<br>' + d[4])
 						.style('left', (d3.event.pageX + 10) + 'px')
 						.style('top', (d3.event.pageY + 10) + 'px')
 				})
@@ -71,7 +71,6 @@ $(document).ready(function() {
 			svg.on('mouseout', d => {
 				tooltip.transition().style('visibility', 'hidden')
 			})
-
 
 			svg
 				.append('g')
@@ -85,6 +84,36 @@ $(document).ready(function() {
 				.attr('id', 'y-axis')
 				.call(yAxis)
 
+			var legend =	svg
+				.selectAll('.legend')
+				.data(['' ,'Doping'])
+				.enter()
+				.append('g')
+		    .attr('class', 'legend')
+		    .attr('id', 'legend')
+		    .attr('transform', (d , i) => {
+		      return 'translate(0,' + ((height/2) + i * 25)+ ')'
+		    })
+
+		  legend
+			  .append('rect')
+		    .attr('x', width - 50)
+		    .attr('width', 20)
+		    .attr('height', 20)
+		    .style('fill',  d => {
+				  let circleColor =  d.length ? '#d64f4f' : '#378718'
+					return circleColor
+				})
+
+		  legend
+			  .append('text')
+		    .attr('x', width - 55)
+		    .attr('y', 15)
+		    .text((d) => {
+					let legendText =  d.length ? 'Cyclist who doped' : 'Cyclist who did not dope'
+					return legendText
+
+				})
 		}
 	)
 })
