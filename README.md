@@ -1,6 +1,6 @@
 # Message Board
 
-View cyclist doping trend on a scatterplot graph.
+View cyclist doping trend on a scatterplot graph.(D3)
 
 Live App: <https://mammoth-cheque.glitch.me/>
 
