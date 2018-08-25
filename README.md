@@ -2,7 +2,7 @@
 
 View cyclist doping trend on a scatterplot graph.
 
-Live App: coming soon
+Live App: <https://mammoth-cheque.glitch.me/>
 
 ## Prerequisites for Local Installation.
 
