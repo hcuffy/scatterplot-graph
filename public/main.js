@@ -11,7 +11,7 @@ $(document).ready(function() {
     	var formatTime = d3.timeFormat(specifier)
 
 			var tooltip = d3
-				.select('.chart')
+				.select('body')
 				.append('div')
 				.attr('id', 'tooltip')
 
